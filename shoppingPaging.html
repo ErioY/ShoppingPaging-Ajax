@@ -1,0 +1,143 @@
+<!--
+ * @Autor: ErioY
+ * @Date: 2019-10-02 16:12:18
+ * @Email: 1973545559@qq.com
+ * @Github: https://github.com/ErioY
+ * @LastEditors: ErioY
+ * @LastEditTime: 2019-10-20 23:56:23
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax实现商品分页效果</title>
+    <style>
+    #wrap {
+        width: 808px;
+        height: 300px;
+        border: 1px #000 solid;
+        margin: 10px auto;
+        position: relative;
+        overflow: hidden;
+    }
+    .nav {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    li {
+        width: 200px;
+        height: 300px;
+        margin-right: 2px;
+        float: left;
+    }
+    li:hover {
+        box-sizing: border-box;
+        border: 1px #dddddd solid;
+    }
+    img {
+        width: 200px;
+        height: 200px;
+    }
+    #page {
+        width: 800px;
+        height: 30px;
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    button {
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgb(217,217,217,0.5);
+        margin: 3px 4px;
+        cursor: pointer;
+        outline: none;
+    }
+    .point {
+        background: #fff;
+        border: 1px rgba(217,217,217, 0.5) solid;
+    }
+    a {
+        color: #000;
+        font-size: 18px;
+        text-align: center;
+    }
+    .nav div {
+        width: 200px;
+        height: 50px;
+        overflow: hidden;
+    }
+    h3,h5,h6 {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        height: 40px;
+        font-weight: normal;
+    }
+    /* id */
+    h6 {
+        width: 50px;
+        font-size: 15px;
+    }
+    /* name */
+    h3 {
+        width: 50px;
+        font-size: 16px;
+        text-align: center;
+    }
+    /* price */
+    h5 {
+        width: 100px;
+        color: #e4383c;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <ul class="nav"></ul>
+        <div id="page"></div>
+    </div>
+    
+    <script src = "js/jquery-1.10.1.min.js"></script>
+    <script>
+    $.getJSON("data.txt", function (data) {
+        showF(0, data);
+        
+        // 按钮的数量
+        var btnNum = Math.ceil(data.length / 4);
+        var j = 0;
+        while(j < btnNum) {
+            $("<button>").html(++j).click(function() {
+                showF($(this).index(),data);
+            }).appendTo($("#page"));
+        }
+    });
+    function showF(n, arr) {
+        $("ul").html("");
+        for (var i = 4 * n; i < 4 * (n + 1) && i < arr.length; i++) {
+            var oLi = $("<li>").appendTo($("ul"));
+            var oA = $("<a href = '#'>").appendTo(oLi);
+            var oImg = $("<img src='' alt=''>").appendTo(oA);
+            oImg.attr("src", "img/" + (i + 1) + ".jpg");
+            var oDiv = $("<div>").appendTo(oA);
+            var oH6 = $("<h6>").html("No_" + arr[i].id).appendTo(oDiv);
+            var oH3 = $("<h3>").html(arr[i].name).appendTo(oDiv);
+            var oH5 = $("<h5>").html(arr[i].price + "元/斤").appendTo(oDiv);
+        }
+        $("#page>button").eq(0).addClass("point");
+    }
+    </script>
+</body>
+</html>
